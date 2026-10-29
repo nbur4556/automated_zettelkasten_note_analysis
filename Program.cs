@@ -6,6 +6,7 @@ var ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
 //TODO: Do I need to do error handling before interacting with ollama?
 ollama.SelectedModel = "clef";
 
+
 string? directoryPath = Environment.GetEnvironmentVariable("CARDS_DIRECTORY");
 
 if (directoryPath == null)
@@ -18,7 +19,6 @@ IEnumerable<string> mdFiles = GetDirectoryContents(directoryPath);
 foreach (string filePath in mdFiles)
 {
     string mdFileContents = GetAllFileContents(filePath);
-    //TODO: Get response for every requested file
     var response = await ollama.SystemOneAsync(new SystemOneRequest
     {
         State = mdFileContents,
