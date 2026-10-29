@@ -4,9 +4,7 @@ using OllamaSharp.Models;
 //TODO: should read from environment variables for ollama address. If not provided default to localhost
 var ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
 //TODO: Do I need to do error handling before interacting with ollama?
-ollama.SelectedModel = "clef";
-
-
+ollama.SelectedModel = Environment.GetEnvironmentVariable("ANALYSIS_MODEL");
 string? directoryPath = Environment.GetEnvironmentVariable("CARDS_DIRECTORY");
 
 if (directoryPath == null)
