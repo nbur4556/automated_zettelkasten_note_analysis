@@ -1,6 +1,6 @@
 ﻿using OllamaSharp;
 
-
+//TODO: should read from environment variables for ollama address. If not provided default to localhost
 var ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
 //TODO: Do I need to do error handling before interacting with ollama?
 ollama.SelectedModel = "clef";
@@ -16,27 +16,55 @@ if (directoryPath == null)
 IEnumerable<string> mdFiles = GetDirectoryContents(directoryPath);
 foreach (string filePath in mdFiles)
 {
-    string mdFilecontents = GetAllFileContents(filePath);
+    string mdFileContents = GetAllFileContents(filePath);
     //TODO: Get response for every requested file
     var response = await ollama.SystemOneAsync(new OllamaSharp.Models.SystemOneRequest
     {
-        State = "Test",
+        State = mdFileContents,
         Questions = new()
         {
-            ["q1"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            ["is_fleeting"] = new OllamaSharp.Models.SystemOneNoulQuestion
             {
-                Instructions = "Did I just say test?"
+                Instructions = "According to Zettelkasaten criteria, is this a fleeting note?"
             },
-            ["q2"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            ["is_organized"] = new OllamaSharp.Models.SystemOneNoulQuestion
             {
-                Instructions = "Did I just say asdf?"
+                Instructions = "According to Zettelkasaten criteria, is this an organized note?"
+            },
+            ["is_distilled"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            {
+                Instructions = "According to Zettelkasaten criteria, is this a distilled note?"
+            },
+            ["is_permanent"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            {
+                Instructions = "According to Zettelkasaten criteria, is this a permanent note?"
+            },
+            ["zet_note_type"] = new OllamaSharp.Models.SystemOneChoiceQuestion
+            {
+                Instructions = "What type of Zettelkasten note is this?",
+                Criteria = new()
+                {
+                    ["fleeting"] = "Fleeting Note",
+                    ["organized"] = "Organized Note",
+                    ["distilled"] = "Distilled Note",
+                    ["permanent"] = "Permanent Note",
+                }
             }
         }
     });
-    var q1 = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["q1"];
-    var q2 = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["q2"];
-    Console.WriteLine(q1.Noul);
-    Console.WriteLine(q2.Noul);
+
+    //TODO: organize output
+    Console.WriteLine(filePath);
+    var isFleeting = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_fleeting"];
+    Console.WriteLine(isFleeting.Noul);
+    var isOrganized = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_organized"];
+    Console.WriteLine(isOrganized.Noul);
+    var isDistilled = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_distilled"];
+    Console.WriteLine(isDistilled.Noul);
+    var isPermanent = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_permanent"];
+    Console.WriteLine(isPermanent.Noul);
+    var zetNoteType = (OllamaSharp.Models.SystemOneChoiceAnswer)response.Answers["zet_note_type"];
+    Console.WriteLine(zetNoteType.Choice);
 }
 
 
