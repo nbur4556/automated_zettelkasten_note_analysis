@@ -1,18 +1,31 @@
 ﻿string directoryPath = "PATH";
 
-if (Directory.Exists(directoryPath))
+string[] mdFiles = GetDirectoryContents(directoryPath);
+foreach (string filePath in mdFiles)
 {
-    string[] mdFiles = Directory.GetFiles(directoryPath, "*.md");
-    foreach (string filePath in mdFiles)
-    {
-        Console.WriteLine(filePath);
-        string contents = GetAllFileContents(filePath);
-        Console.WriteLine(contents);
-    }
+    string mdFilecontents = GetAllFileContents(filePath);
+    Console.WriteLine(mdFilecontents);
+
 }
-else
+
+string[] GetDirectoryContents(string directorypath)
 {
-    Console.WriteLine("The specified directory does not exist");
+    Console.WriteLine(directorypath);
+    if (Directory.Exists(directorypath) == false)
+    {
+        Console.WriteLine("The specified directory does not exist");
+        return [];
+    }
+
+    string[] mdFiles = Directory.GetFiles(directorypath, "*.md");
+    string[] subdirectories = Directory.GetDirectories(directorypath);
+
+    foreach (string subdirectory in subdirectories)
+    {
+        Console.WriteLine(subdirectory);
+    }
+
+    return mdFiles;
 }
 
 string GetAllFileContents(string filepath)
