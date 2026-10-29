@@ -1,4 +1,10 @@
-﻿string directoryPath = "PATH";
+﻿string? directoryPath = Environment.GetEnvironmentVariable("CARDS_DIRECTORY");
+
+if (directoryPath == null)
+{
+    Console.WriteLine("No CARDS_DIRECTORY provided");
+    return;
+}
 
 IEnumerable<string> mdFiles = GetDirectoryContents(directoryPath);
 foreach (string filePath in mdFiles)
