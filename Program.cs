@@ -9,10 +9,7 @@ if (directoryPath == null)
 IEnumerable<string> mdFiles = GetDirectoryContents(directoryPath);
 foreach (string filePath in mdFiles)
 {
-    Console.WriteLine(filePath);
     string mdFilecontents = GetAllFileContents(filePath);
-    // Console.WriteLine(mdFilecontents);
-
 }
 
 //TODO: This should have a configurable max depth?
