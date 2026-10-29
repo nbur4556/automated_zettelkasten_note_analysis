@@ -1,30 +1,24 @@
 ﻿string directoryPath = "PATH";
 
-string[] mdFiles = GetDirectoryContents(directoryPath);
+IEnumerable<string> mdFiles = GetDirectoryContents(directoryPath);
 foreach (string filePath in mdFiles)
 {
+    Console.WriteLine(filePath);
     string mdFilecontents = GetAllFileContents(filePath);
-    Console.WriteLine(mdFilecontents);
+    // Console.WriteLine(mdFilecontents);
 
 }
 
-string[] GetDirectoryContents(string directorypath)
+//TODO: This should have a configurable max depth?
+IEnumerable<string> GetDirectoryContents(string directorypath)
 {
-    Console.WriteLine(directorypath);
     if (Directory.Exists(directorypath) == false)
     {
         Console.WriteLine("The specified directory does not exist");
         return [];
     }
 
-    string[] mdFiles = Directory.GetFiles(directorypath, "*.md");
-    string[] subdirectories = Directory.GetDirectories(directorypath);
-
-    foreach (string subdirectory in subdirectories)
-    {
-        Console.WriteLine(subdirectory);
-    }
-
+    IEnumerable<string> mdFiles = Directory.EnumerateFiles(directorypath, "*.md", SearchOption.AllDirectories);
     return mdFiles;
 }
 
