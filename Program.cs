@@ -15,9 +15,14 @@ else
     Console.WriteLine("The specified directory does not exist");
 }
 
-//TODO: Error validation
 string GetAllFileContents(string filepath)
 {
+    if (File.Exists(filepath) == false)
+    {
+        Console.WriteLine("The specified file does not exist");
+        return "";
+    }
+
     string content = "";
     var lines = File.ReadAllLines(filepath);
     foreach (string line in lines)
