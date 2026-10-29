@@ -1,4 +1,5 @@
 ﻿using OllamaSharp;
+using OllamaSharp.Models;
 
 //TODO: should read from environment variables for ollama address. If not provided default to localhost
 var ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
@@ -18,28 +19,28 @@ foreach (string filePath in mdFiles)
 {
     string mdFileContents = GetAllFileContents(filePath);
     //TODO: Get response for every requested file
-    var response = await ollama.SystemOneAsync(new OllamaSharp.Models.SystemOneRequest
+    var response = await ollama.SystemOneAsync(new SystemOneRequest
     {
         State = mdFileContents,
         Questions = new()
         {
-            ["is_fleeting"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            ["is_fleeting"] = new SystemOneNoulQuestion
             {
                 Instructions = "According to Zettelkasaten criteria, is this a fleeting note?"
             },
-            ["is_organized"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            ["is_organized"] = new SystemOneNoulQuestion
             {
                 Instructions = "According to Zettelkasaten criteria, is this an organized note?"
             },
-            ["is_distilled"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            ["is_distilled"] = new SystemOneNoulQuestion
             {
                 Instructions = "According to Zettelkasaten criteria, is this a distilled note?"
             },
-            ["is_permanent"] = new OllamaSharp.Models.SystemOneNoulQuestion
+            ["is_permanent"] = new SystemOneNoulQuestion
             {
                 Instructions = "According to Zettelkasaten criteria, is this a permanent note?"
             },
-            ["zet_note_type"] = new OllamaSharp.Models.SystemOneChoiceQuestion
+            ["zet_note_type"] = new SystemOneChoiceQuestion
             {
                 Instructions = "What type of Zettelkasten note is this?",
                 Criteria = new()
@@ -55,15 +56,15 @@ foreach (string filePath in mdFiles)
 
     //TODO: organize output
     Console.WriteLine(filePath);
-    var isFleeting = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_fleeting"];
+    var isFleeting = (SystemOneNoulAnswer)response.Answers["is_fleeting"];
     Console.WriteLine(isFleeting.Noul);
-    var isOrganized = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_organized"];
+    var isOrganized = (SystemOneNoulAnswer)response.Answers["is_organized"];
     Console.WriteLine(isOrganized.Noul);
-    var isDistilled = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_distilled"];
+    var isDistilled = (SystemOneNoulAnswer)response.Answers["is_distilled"];
     Console.WriteLine(isDistilled.Noul);
-    var isPermanent = (OllamaSharp.Models.SystemOneNoulAnswer)response.Answers["is_permanent"];
+    var isPermanent = (SystemOneNoulAnswer)response.Answers["is_permanent"];
     Console.WriteLine(isPermanent.Noul);
-    var zetNoteType = (OllamaSharp.Models.SystemOneChoiceAnswer)response.Answers["zet_note_type"];
+    var zetNoteType = (SystemOneChoiceAnswer)response.Answers["zet_note_type"];
     Console.WriteLine(zetNoteType.Choice);
 }
 
