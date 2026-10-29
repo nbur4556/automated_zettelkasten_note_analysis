@@ -6,14 +6,23 @@ if (Directory.Exists(directoryPath))
     foreach (string filePath in mdFiles)
     {
         Console.WriteLine(filePath);
-        var lines = File.ReadAllLines(filePath);
-        foreach (string line in lines)
-        {
-            Console.WriteLine(line);
-        }
+        string contents = GetAllFileContents(filePath);
+        Console.WriteLine(contents);
     }
 }
 else
 {
     Console.WriteLine("The specified directory does not exist");
+}
+
+//TODO: Error validation
+string GetAllFileContents(string filepath)
+{
+    string content = "";
+    var lines = File.ReadAllLines(filepath);
+    foreach (string line in lines)
+    {
+        content += line;
+    }
+    return content;
 }
