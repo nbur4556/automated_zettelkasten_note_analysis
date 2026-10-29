@@ -1,11 +1,30 @@
 ﻿using OllamaSharp;
 using OllamaSharp.Models;
 
-//TODO: should read from environment variables for ollama address. If not provided default to localhost
-var ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
+// Configure the environment
+string? ANALYSIS_MODEL = Environment.GetEnvironmentVariable("ANALYSIS_MODEL");
+string? CARDS_DIRECTORY = Environment.GetEnvironmentVariable("CARDS_DIRECTORY");
+string? OLLAMA_URI = Environment.GetEnvironmentVariable("OLLAMA_URI");
+
+if (OLLAMA_URI == null)
+{
+    OLLAMA_URI = "http://localhost:11434";
+}
+if (ANALYSIS_MODEL == null)
+{
+    Console.WriteLine("No ANALYSIS_MODEL provided");
+    return;
+}
+if (CARDS_DIRECTORY == null)
+{
+    Console.WriteLine("No CARDS_DIRECTORY provided");
+    return;
+}
+
 //TODO: Do I need to do error handling before interacting with ollama?
-ollama.SelectedModel = Environment.GetEnvironmentVariable("ANALYSIS_MODEL");
-string? directoryPath = Environment.GetEnvironmentVariable("CARDS_DIRECTORY");
+var ollama = new OllamaApiClient(new Uri(OLLAMA_URI));
+ollama.SelectedModel = ANALYSIS_MODEL;
+string? directoryPath = CARDS_DIRECTORY;
 
 if (directoryPath == null)
 {

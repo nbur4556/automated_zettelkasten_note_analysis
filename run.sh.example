@@ -1,0 +1,4 @@
+export OLLAMA_URI="http://localhost:11434"
+export ANALYSIS_MODEL="clef:latest"
+export CARDS_DIRECTORY="RELATIVE/OR/ABSOULTE/PATH/TO/NOTES/DIRECTORY"
+dotnet run
